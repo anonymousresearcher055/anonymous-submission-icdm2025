@@ -61,7 +61,7 @@ import matplotlib.pyplot as plt
 
 
 def load_graph_from_files(edgelist_file, features_file):
-    # Load edges
+
     edges = pd.read_csv(edgelist_file, sep=' ', header=None)
     nodes = pd.concat([edges[0], edges[1]]).unique()
     node_to_idx = {node: i for i, node in enumerate(nodes)}
@@ -71,18 +71,16 @@ def load_graph_from_files(edgelist_file, features_file):
     adjacency = sp.coo_matrix((np.ones(len(edges)), (row, col)),
                               shape=(len(nodes), len(nodes))).tocsr()
 
-    # Make symmetric undirected
+
     adjacency = (adjacency + adjacency.T).minimum(1)
 
-    # Load node attributes
+
     features_data = pd.read_csv(features_file)
     features_data['node_idx'] = features_data['nodes'].map(node_to_idx)
     node_attribute_dict = dict(zip(features_data['node_idx'], features_data['attribute']))
     node_attribute_df = pd.DataFrame({'node_idx': features_data['node_idx'],
                                       'attribute': features_data['attribute']})
 
-    # Build red/blue sparse adjacency directly from nonzero entries
-    coo = adjacency.tocoo()
 
 
     
@@ -198,40 +196,38 @@ def computeMetrics(G, communities,G_attribute):
     return 
 
 def plotCommunities(G, node_attributes_dict, communities, file_name, plotName,method):
-    # Assuming you have G, node_attributes_dict, and communities already computed from your code
 
-    # List of different markers for communities
     community_markers = ['o', 's', '^', 'D', 'v', 'p', '*', 'h', 'H', 'X']
 
     plt.figure().set_size_inches(22, 19)
-    # Generate a layout for the graph (e.g., spring layout)
+
     pos = nx.spring_layout(G)
 
-    # Draw the edges
+
     nx.draw_networkx_edges(G, pos, alpha=0.5)
 
-    # Draw nodes for each community with attribute-specific colors and different markers
+
     for community_id, community_nodes in enumerate(communities):
-        community_marker = community_markers[community_id % len(community_markers)]  # Cycle through markers if more than available
+        community_marker = community_markers[community_id % len(community_markers)]
         
-        # Assign colors for each node based on its attribute (red for 0, blue for 1)
+
         node_colors = []
         for node in community_nodes:
             if node_attributes_dict[node] == 0:
-                node_colors.append('red')  # Red for attribute == 0
+                node_colors.append('red')  
             else:
-                node_colors.append('blue')  # Blue for attribute == 1
+                node_colors.append('blue')  
         
-        # Draw the nodes for the current community with attribute-based colors
-        nx.draw_networkx_nodes(G, pos, nodelist=community_nodes, 
-                               node_color=node_colors,  # Attribute-based color
-                               label=f'Community {community_id}',
-                               node_size=300, alpha=1, linewidths=1, node_shape=community_marker)  # Increase node size, linewidths, and use different markers
 
-    # Draw labels (optional)
+        nx.draw_networkx_nodes(G, pos, nodelist=community_nodes, 
+                               node_color=node_colors,  
+                               label=f'Community {community_id}',
+                               node_size=300, alpha=1, linewidths=1, node_shape=community_marker)  
+
+
     nx.draw_networkx_labels(G, pos, font_size=10)
 
-    # Add a legend for the communities
+
     legend_patches = []
     for community_id in range(len(communities)):
         community_marker = community_markers[community_id % len(community_markers)]
@@ -239,35 +235,30 @@ def plotCommunities(G, node_attributes_dict, communities, file_name, plotName,me
                            markerfacecolor='gray', markersize=10)
         legend_patches.append(patch)
 
-    # Add red/blue legend for node attributes
+
     red_patch = plt.Line2D([0], [0], marker='o', color='w', label='Attribute 0 (red)',
                            markerfacecolor='red', markersize=10)
     blue_patch = plt.Line2D([0], [0], marker='o', color='w', label='Attribute 1 (blue)',
                             markerfacecolor='blue', markersize=10)
 
-    # Display legend combining communities and attributes
+
     plt.legend(handles=legend_patches + [red_patch, blue_patch], loc='best')
     
     plt.savefig('Synth Results\{}\{}\{}.png'.format(method,file_name, plotName))
     plt.close()
-    #plt.show()
+
     
     
 
-#Synthetic
+
 asymetric_data_path = 'Data//Assymetric'
 
 
 file_patterns = ['dataset_1000_5_02_09_09_08_08_0' ]
-#print('file_patterns:',file_patterns)
 
-# Iterate through the files in the directory and check if they match any of the generated filenames
 asymetric_file_paths = [os.path.join(asymetric_data_path, file) for file in os.listdir(asymetric_data_path) if 'csv' not in file and any(pattern in file for pattern in file_patterns)]
 
-#file_paths = asymetric_file_paths
 
-
-# Iterate over the file paths
 datasets = []
 
 for file_path in asymetric_file_paths:
@@ -325,24 +316,21 @@ for file_path in datasets:
     blue_communities = deepGroupClustering(datasetRead+'.edgelist',datasetRead+'.csv',lamda=0.5)
         
     
-    # Compute Louvain communities
+
 
     communities = blue_communities
     print('Number of communities:',len(blue_communities))
-    # Compute metrics for the blue communities
-    #computeMetrics(graph, blue_communities, graph_attributes)
+
 
     plotName = datasetName+'_Deep Group'
     plotCommunities(graph, graph_attributes, blue_communities, datasetName, plotName,'Deep Group Communities')
     
     
-    
-    # Create a DataFrame from the blue_communities
+
     
     community_df = pd.DataFrame([(node, community) for community, nodes in enumerate(blue_communities) for node in nodes], columns=['nodes', 'community'])
     
-    # Write the DataFrame to a CSV file
-    
+
     community_df.to_csv(os.path.join('Synth Results\\Deep Group Communities\\'+datasetName, datasetName + '_communities.csv'), index=False)
     
     
@@ -358,23 +346,22 @@ for file_path in datasets:
     blue_communities = deepDiversityClustering(datasetRead+'.edgelist',datasetRead+'.csv',lamda=0.5)
         
     
-    # Compute Louvain communities
+
 
     communities = blue_communities
     print('Number of communities:',len(blue_communities))
-    # Compute metrics for the blue communities
-    #computeMetrics(graph, blue_communities, graph_attributes)
+
 
     plotName = datasetName+'_Deep Diversity'
     plotCommunities(graph, graph_attributes, blue_communities, datasetName, plotName,'Deep Diversity Communities')
     
     
     
-    # Create a DataFrame from the blue_communities
+
     
     community_df = pd.DataFrame([(node, community) for community, nodes in enumerate(blue_communities) for node in nodes], columns=['nodes', 'community'])
     
-    # Write the DataFrame to a CSV file
+
     
     community_df.to_csv(os.path.join('Synth Results\\Deep Diversity Communities\\'+datasetName, datasetName + '_communities.csv'), index=False)
     
@@ -391,23 +378,22 @@ for file_path in datasets:
     blue_communities = deepDiversityClustering(datasetRead+'.edgelist',datasetRead+'.csv',lamda=0.5)
         
     
-    # Compute Louvain communities
+
 
     communities = blue_communities
     print('Number of communities:',len(blue_communities))
-    # Compute metrics for the blue communities
-    #computeMetrics(graph, blue_communities, graph_attributes)
+
 
     plotName = datasetName+'_Deep Fairness'
     plotCommunities(graph, graph_attributes, blue_communities, datasetName, plotName,'Deep Fairness Communities')
     
     
     
-    # Create a DataFrame from the blue_communities
+
     
     community_df = pd.DataFrame([(node, community) for community, nodes in enumerate(blue_communities) for node in nodes], columns=['nodes', 'community'])
     
-    # Write the DataFrame to a CSV file
+
     
     community_df.to_csv(os.path.join('Synth Results\\Deep Fairness Communities\\'+datasetName, datasetName + '_communities.csv'), index=False)
     
