@@ -49,7 +49,7 @@ python main_deep.py
 
 ### Fairness Parameters
 
-- **`λ` (lambda)** controls the trade-off between structural modularity and fairness objectives, taking values from **0** (optimize only modularity) to **1** (optimize only fairness).
+- **`λ` (lambda)** controls the trade-off between structural modularity and fairness objectives, taking values from **0** (optimize only modularity) to **1** (optimize only fairness criterion).
 - **`ϕ` (phi)** is used in `DeepFairness` to penalize the imbalance between red and blue group modularity, encouraging equal connectivity across groups.
 
 
