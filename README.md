@@ -32,7 +32,7 @@ This repository implements the community detection algorithms described in our I
 ### Deep Clustering with Custom Loss
 - **DeepFairness**: Minimizes the absolute difference between red and blue group modularity.
 - **DeepGroup**: Maximizes modularity for a protected group in addition to overall modularity.
-- **DeepDiversity**: Maximizes inter-group connectivity.
+- **DeepDiversity**: Maximizes diversity.
 
 ## Running the Code
 
