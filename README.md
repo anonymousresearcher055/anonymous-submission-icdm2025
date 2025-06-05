@@ -63,4 +63,4 @@ python main_deep.py
 | DiversityDMoN     | ✅       | ❌       | Modify adjacency to emphasize diversity             |
 | DeepGroup         | ✅       | ❌       | Loss trade-off between modularity and group modularity                |
 | DeepDiversity     | ✅       | ❌       | Loss trade-off between modularity and diversity                       |
-| DeepFairness      | ❌       | ✅       | Penalizes modularity imbalance between groups (|Q<sup>R</sup> − Q<sup>B</sup>|) |
+| DeepFairness      | ❌       | ✅       | Penalizes modularity imbalance between groups |
