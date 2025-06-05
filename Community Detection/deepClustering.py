@@ -436,7 +436,7 @@ def build_fairness_dmon(input_features,
       outputs=[pool, pool_assignment])
 
 
-def deepFairnessClustering(edgelist_path,attributes_path,featuresType = 'id',lamda = 0.5):
+def deepFairnessClustering(edgelist_path,attributes_path,featuresType = 'id',lamda = 200):
     
     redAttr = 1
     
