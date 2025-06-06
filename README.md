@@ -21,15 +21,15 @@ This repository implements the community detection algorithms described in our I
 
 ## Algorithms
 
-### Spectral Algorithms
+### Input based Spectral Algorithms
 - **GroupSpectral**: Enhances group-modularity using a modified modularity matrix `B(λ) = (1−λ)B + λBR`.
 - **DiversitySpectral**: Promotes diversity using a modified modularity matrix `B(λ) = (1−λ)B +Bdiv`.
 
-### DMoN-Based Algorithms
+### Input based DMoN Algorithms
 - **GroupDMoN**: Modifies the adjacency matrix to emphasize edges involving a target group `A(λ) = (1−λ)A + λAR`.
 - **DiversityDMoN**: Emphasizes inter-group edges to promote diversity within clusters `A(λ) = (1−λ)A +Adiv`.
 
-### Deep Clustering with Custom Loss
+### Loss based Deep Clustering
 - **DeepFairness**: Minimizes the absolute difference between red and blue group modularity.
 - **DeepGroup**: Maximizes modularity for a protected group in addition to overall modularity.
 - **DeepDiversity**: Maximizes diversity.
